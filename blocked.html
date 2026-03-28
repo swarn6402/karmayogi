@@ -45,6 +45,11 @@
           <p class="blocked-site" id="blocked-site">Unknown site</p>
         </div>
 
+        <section class="intention-panel reveal reveal-3 is-hidden" id="intention-panel" aria-live="polite">
+          <p class="intention-label">your intention</p>
+          <p class="intention-text" id="intention-text"></p>
+        </section>
+
         <section class="quote-block" aria-live="polite">
           <p class="sanskrit-text sanskrit-animate" id="sanskrit"></p>
           <p class="transliteration reveal reveal-4" id="transliteration"></p>
@@ -62,6 +67,8 @@
           </div>
         </section>
 
+        <p class="daily-count reveal reveal-7" id="daily-count">You have been redirected 0 times today</p>
+
         <div class="actions reveal reveal-6">
           <button class="action-button action-button--primary" id="return-button" type="button">
             Return to Work
@@ -70,6 +77,8 @@
             5 Min Grace
           </button>
         </div>
+
+        <p class="escape-hint reveal reveal-8">press esc to return</p>
       </section>
     </main>
     <script src="quotes.js"></script>

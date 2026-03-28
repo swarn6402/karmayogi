@@ -35,6 +35,27 @@ function getLocal(keys) {
   return chrome.storage.local.get(keys);
 }
 
+function getTodayString() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+async function incrementDailyRedirectCount() {
+  const today = getTodayString();
+  const { daily_count: dailyCount = 0, daily_count_date: dailyCountDate = "" } =
+    await getLocal(["daily_count", "daily_count_date"]);
+
+  const nextCount = dailyCountDate === today ? Number(dailyCount || 0) + 1 : 1;
+
+  await chrome.storage.local.set({
+    daily_count: nextCount,
+    daily_count_date: today
+  });
+}
+
 function normalizeHostname(input) {
   if (!input) {
     return "";
@@ -105,53 +126,62 @@ function isBlockedHostname(hostname, blockedSites) {
 }
 
 chrome.runtime.onInstalled.addListener(async () => {
-  await chrome.storage.sync.set({
-    focusMode: true,
-    blockedSites: DEFAULT_BLOCKED_SITES
-  });
+  try {
+    await chrome.storage.sync.set({
+      focusMode: true,
+      blockedSites: DEFAULT_BLOCKED_SITES
+    });
+  } catch (error) {
+    console.warn("Unable to initialize default KarmaYogi settings.", error);
+  }
 });
 
 chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
-  if (details.frameId !== 0 || details.tabId < 0) {
-    return;
+  try {
+    if (details.frameId !== 0 || details.tabId < 0) {
+      return;
+    }
+
+    const { url, tabId } = details;
+
+    if (!url || isRestrictedScheme(url)) {
+      return;
+    }
+
+    const hostname = extractRootHostname(url);
+
+    if (!hostname) {
+      return;
+    }
+
+    const { focusMode, blockedSites = DEFAULT_BLOCKED_SITES } = await getSync([
+      "focusMode",
+      "blockedSites"
+    ]);
+
+    if (focusMode !== true) {
+      return;
+    }
+
+    if (!isBlockedHostname(hostname, blockedSites)) {
+      return;
+    }
+
+    const graceKey = `grace_${hostname}`;
+    const localState = await getLocal(graceKey);
+    const graceUntil = Number(localState[graceKey] || 0);
+
+    if (graceUntil > Date.now()) {
+      return;
+    }
+
+    const targetUrl =
+      chrome.runtime.getURL(BLOCKED_PAGE_PATH) +
+      `?site=${encodeURIComponent(hostname)}`;
+
+    await incrementDailyRedirectCount();
+    await chrome.tabs.update(tabId, { url: targetUrl });
+  } catch (error) {
+    console.warn("Unable to process KarmaYogi redirect.", error);
   }
-
-  const { url, tabId } = details;
-
-  if (!url || isRestrictedScheme(url)) {
-    return;
-  }
-
-  const hostname = extractRootHostname(url);
-
-  if (!hostname) {
-    return;
-  }
-
-  const { focusMode, blockedSites = DEFAULT_BLOCKED_SITES } = await getSync([
-    "focusMode",
-    "blockedSites"
-  ]);
-
-  if (focusMode !== true) {
-    return;
-  }
-
-  if (!isBlockedHostname(hostname, blockedSites)) {
-    return;
-  }
-
-  const graceKey = `grace_${hostname}`;
-  const localState = await getLocal(graceKey);
-  const graceUntil = Number(localState[graceKey] || 0);
-
-  if (graceUntil > Date.now()) {
-    return;
-  }
-
-  const targetUrl =
-    chrome.runtime.getURL(BLOCKED_PAGE_PATH) +
-    `?site=${encodeURIComponent(hostname)}`;
-
-  await chrome.tabs.update(tabId, { url: targetUrl });
 });

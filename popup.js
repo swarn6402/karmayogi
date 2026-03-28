@@ -14,7 +14,8 @@ const DEFAULT_BLOCKED_SITES = [
 
 const state = {
   focusMode: true,
-  blockedSites: [...DEFAULT_BLOCKED_SITES]
+  blockedSites: [...DEFAULT_BLOCKED_SITES],
+  focusIntention: ""
 };
 
 const focusToggle = document.getElementById("focus-toggle");
@@ -23,6 +24,8 @@ const blockedSitesContainer = document.getElementById("blocked-sites");
 const siteInput = document.getElementById("site-input");
 const addSiteButton = document.getElementById("add-site-button");
 const inputFeedback = document.getElementById("input-feedback");
+const intentionInput = document.getElementById("intention-input");
+let intentionSaveTimer = null;
 
 function hasChromeStorage() {
   return (
@@ -40,7 +43,11 @@ async function loadState() {
     return;
   }
 
-  const stored = await chrome.storage.sync.get(["focusMode", "blockedSites"]);
+  const stored = await chrome.storage.sync.get([
+    "focusMode",
+    "blockedSites",
+    "focusIntention"
+  ]);
 
   state.focusMode =
     typeof stored.focusMode === "boolean" ? stored.focusMode : true;
@@ -48,6 +55,8 @@ async function loadState() {
   state.blockedSites = Array.isArray(stored.blockedSites)
     ? stored.blockedSites
     : [...DEFAULT_BLOCKED_SITES];
+  state.focusIntention =
+    typeof stored.focusIntention === "string" ? stored.focusIntention : "";
 
   render();
 }
@@ -154,8 +163,17 @@ function renderBlockedSites() {
   });
 }
 
+function renderFocusIntention() {
+  if (!intentionInput) {
+    return;
+  }
+
+  intentionInput.value = state.focusIntention;
+}
+
 function render() {
   renderFocusMode();
+  renderFocusIntention();
   renderBlockedSites();
 }
 
@@ -187,6 +205,16 @@ async function handleAddSite() {
   }
 
   setFeedback(`${normalized} added to your blocked list.`, "success");
+}
+
+async function saveFocusIntention() {
+  if (!hasChromeStorage()) {
+    return;
+  }
+
+  await chrome.storage.sync.set({
+    focusIntention: state.focusIntention
+  });
 }
 
 if (focusToggle) {
@@ -228,6 +256,39 @@ if (siteInput) {
 
   siteInput.addEventListener("input", () => {
     setFeedback("");
+  });
+}
+
+if (intentionInput) {
+  intentionInput.addEventListener("input", () => {
+    state.focusIntention = intentionInput.value;
+
+    if (intentionSaveTimer) {
+      window.clearTimeout(intentionSaveTimer);
+    }
+
+    intentionSaveTimer = window.setTimeout(async () => {
+      try {
+        await saveFocusIntention();
+      } catch (error) {
+        console.warn("Unable to save focus intention.", error);
+      }
+    }, 800);
+  });
+
+  intentionInput.addEventListener("blur", async () => {
+    state.focusIntention = intentionInput.value;
+
+    if (intentionSaveTimer) {
+      window.clearTimeout(intentionSaveTimer);
+      intentionSaveTimer = null;
+    }
+
+    try {
+      await saveFocusIntention();
+    } catch (error) {
+      console.warn("Unable to save focus intention.", error);
+    }
   });
 }
 
