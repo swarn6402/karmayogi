@@ -2,7 +2,20 @@ body {
   margin: 0;
   padding: 0;
   width: 360px;
+  min-width: 360px;
+  box-sizing: border-box;
+  overflow-x: hidden;
   background: var(--color-bg);
+}
+
+.popup-shell,
+.popup-shell *,
+.popup-content,
+.panel-section,
+.site-pills,
+.popup-footer,
+.add-site-row {
+  box-sizing: border-box;
 }
 
 .popup-shell {
@@ -21,6 +34,7 @@ body {
 .popup-content {
   flex: 1 1 auto;
   overflow-y: auto;
+  max-width: 100%;
   padding: 16px 18px 0;
   scrollbar-width: thin;
   scrollbar-color: var(--color-saffron) rgba(255, 255, 255, 0.06);
@@ -72,6 +86,7 @@ body {
 
 .panel-section {
   margin-bottom: 16px;
+  max-width: 100%;
   padding: 15px 14px;
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.03);
@@ -175,10 +190,12 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  max-width: 100%;
 }
 
 .site-pill {
   display: inline-flex;
+  max-width: 100%;
   align-items: center;
   gap: 8px;
   padding: 7px 10px 7px 12px;
@@ -228,10 +245,12 @@ body {
   display: flex;
   align-items: flex-end;
   gap: 12px;
+  max-width: 100%;
 }
 
 #site-input {
   flex: 1 1 auto;
+  min-width: 0;
   padding: 8px 0;
   border: 0;
   border-bottom: 1px solid var(--color-saffron-muted);
