@@ -34,7 +34,8 @@
         "blocked.css",
         "blocked.js",
         "quotes.js",
-        "theme.css"
+        "theme.css",
+        "icons/*"
       ],
       "matches": [
         "<all_urls>"
