@@ -1,17 +1,27 @@
-@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Noto+Serif+Devanagari:wght@400;600&display=swap");
 
 :root {
-  --color-bg: #fff8ef;
-  --color-surface: #ffffff;
-  --color-surface-soft: #fff2df;
-  --color-text: #2f1a08;
-  --color-muted: #73553a;
-  --color-accent: #ff9a1f;
-  --color-accent-deep: #9a4e00;
-  --shadow-soft: 0 18px 40px rgba(80, 41, 0, 0.12);
+  --color-bg: #0D0A07;
+  --color-surface: #1A1208;
+  --color-saffron: #FF9A1F;
+  --color-saffron-muted: #C47A15;
+  --color-gold: #D4AF37;
+  --color-cream: #F5E6C8;
+  --color-cream-muted: rgba(245, 230, 200, 0.55);
+  --color-divider: rgba(212, 175, 55, 0.25);
+  --color-glow: rgba(255, 154, 31, 0.10);
+  --font-devanagari: "Noto Serif Devanagari", serif;
+  --font-heading: "Cinzel", serif;
+  --font-body: "EB Garamond", serif;
+
+  /* Compatibility aliases for existing popup scaffolding. */
+  --color-text: var(--color-cream);
+  --color-muted: #8d775d;
 }
 
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -19,17 +29,34 @@ html,
 body {
   margin: 0;
   padding: 0;
+  min-height: 100%;
 }
 
 body {
-  color: var(--color-text);
+  color: var(--color-cream);
   background: var(--color-bg);
-  font-family: "Inter", sans-serif;
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 h1,
 h2,
 h3,
-blockquote {
-  font-family: "Cormorant Garamond", serif;
+h4,
+h5,
+h6,
+.font-heading {
+  font-family: var(--font-heading);
+}
+
+.font-sanskrit {
+  font-family: var(--font-devanagari);
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
 }
