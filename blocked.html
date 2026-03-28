@@ -8,16 +8,68 @@
     <link rel="stylesheet" href="blocked.css">
   </head>
   <body>
-    <main class="page-shell">
-      <section class="card">
-        <p class="eyebrow">Focus Mode</p>
-        <h1 class="title">This site is blocked.</h1>
-        <p class="body-copy">KarmaYogi will redirect here when a distracting site is opened.</p>
-        <div class="site-chip" id="blocked-site">Blocked site</div>
-        <blockquote class="quote-card">
-          <p class="quote-text" id="quote-text"></p>
-          <footer class="quote-source" id="quote-source"></footer>
-        </blockquote>
+    <main class="blocked-page">
+      <section class="blocked-card" aria-labelledby="blocked-site">
+        <div class="lotus-wrap reveal reveal-0" aria-hidden="true">
+          <svg class="lotus-icon" viewBox="0 0 64 64" role="presentation">
+            <defs>
+              <filter id="lotus-glow" x="-50%" y="-50%" width="200%" height="200%">
+                <feDropShadow dx="0" dy="0" stdDeviation="2.4" flood-color="#FF9A1F" flood-opacity="0.45"/>
+              </filter>
+            </defs>
+            <g fill="currentColor" filter="url(#lotus-glow)">
+              <ellipse cx="32" cy="17" rx="5.8" ry="15"/>
+              <ellipse cx="32" cy="17" rx="5.8" ry="15" transform="rotate(45 32 32)"/>
+              <ellipse cx="32" cy="17" rx="5.8" ry="15" transform="rotate(90 32 32)"/>
+              <ellipse cx="32" cy="17" rx="5.8" ry="15" transform="rotate(135 32 32)"/>
+              <ellipse cx="32" cy="17" rx="5.8" ry="15" transform="rotate(180 32 32)"/>
+              <ellipse cx="32" cy="17" rx="5.8" ry="15" transform="rotate(225 32 32)"/>
+              <ellipse cx="32" cy="17" rx="5.8" ry="15" transform="rotate(270 32 32)"/>
+              <ellipse cx="32" cy="17" rx="5.8" ry="15" transform="rotate(315 32 32)"/>
+              <circle cx="32" cy="32" r="5.4"/>
+            </g>
+          </svg>
+        </div>
+
+        <div class="identity reveal reveal-1">
+          <p class="extension-label">KARMA YOGI</p>
+          <div class="ornament-divider" aria-hidden="true">
+            <span class="ornament-line"></span>
+            <span class="ornament-gem">&#9670;</span>
+            <span class="ornament-line"></span>
+          </div>
+        </div>
+
+        <div class="blocked-notice reveal reveal-2">
+          <p class="notice-kicker">You reached for</p>
+          <p class="blocked-site" id="blocked-site">Unknown site</p>
+        </div>
+
+        <section class="quote-block" aria-live="polite">
+          <p class="sanskrit-text sanskrit-animate" id="sanskrit"></p>
+          <p class="transliteration reveal reveal-4" id="transliteration"></p>
+
+          <div class="translation-group reveal reveal-5">
+            <div class="ornament-divider ornament-divider--thin" aria-hidden="true">
+              <span class="ornament-line"></span>
+              <span class="ornament-gem">&#9670;</span>
+              <span class="ornament-line"></span>
+            </div>
+
+            <p class="translation" id="translation"></p>
+            <p class="verse-ref" id="verse-ref"></p>
+            <p class="context" id="context"></p>
+          </div>
+        </section>
+
+        <div class="actions reveal reveal-6">
+          <button class="action-button action-button--primary" id="return-button" type="button">
+            Return to Work
+          </button>
+          <button class="action-button action-button--secondary" id="grace-button" type="button">
+            5 Min Grace
+          </button>
+        </div>
       </section>
     </main>
     <script src="quotes.js"></script>
