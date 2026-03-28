@@ -1,0 +1,64 @@
+.page-shell {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at top, rgba(255, 154, 31, 0.22), transparent 34%),
+    linear-gradient(180deg, #fff8ef 0%, #ffe5c3 100%);
+}
+
+.card {
+  width: min(680px, 100%);
+  padding: 32px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 24px 60px rgba(80, 41, 0, 0.16);
+  border: 1px solid rgba(255, 154, 31, 0.25);
+}
+
+.eyebrow {
+  margin: 0 0 12px;
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.title {
+  margin: 0 0 12px;
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.body-copy {
+  margin: 0 0 20px;
+  color: var(--color-muted);
+}
+
+.site-chip {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 24px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(255, 154, 31, 0.12);
+  color: var(--color-accent-deep);
+  font-weight: 700;
+}
+
+.quote-card {
+  margin: 0;
+  padding: 20px;
+  border-radius: 18px;
+  background: var(--color-surface-soft);
+  border-left: 4px solid var(--color-accent);
+}
+
+.quote-text {
+  margin: 0 0 12px;
+  font-size: 1.1rem;
+}
+
+.quote-source {
+  color: var(--color-muted);
+}
