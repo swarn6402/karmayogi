@@ -12,8 +12,20 @@ const DEFAULT_BLOCKED_SITES = [
   "tumblr.com"
 ];
 
-const GRACE_WINDOW_MS = 5 * 60 * 1000;
 const BLOCKED_PAGE_PATH = "blocked.html";
+const SECOND_LEVEL_TLDS = new Set([
+  "co.uk",
+  "org.uk",
+  "gov.uk",
+  "ac.uk",
+  "co.in",
+  "org.in",
+  "gov.in",
+  "co.jp",
+  "com.au",
+  "net.au",
+  "org.au"
+]);
 
 function getSync(keys) {
   return chrome.storage.sync.get(keys);
@@ -28,44 +40,68 @@ function normalizeHostname(input) {
     return "";
   }
 
-  let hostname = input;
+  let rawValue = input.trim();
+
+  if (isRestrictedScheme(rawValue)) {
+    return "";
+  }
+
+  rawValue = rawValue
+    .replace(/^[a-z]+:\/\//i, "")
+    .replace(/^www\./i, "")
+    .split("/")[0]
+    .split("?")[0]
+    .split("#")[0];
+
+  let hostname = rawValue;
 
   try {
-    hostname = new URL(input).hostname;
+    hostname = new URL(`https://${rawValue}`).hostname;
   } catch (error) {
-    hostname = input;
+    hostname = rawValue;
   }
 
   return hostname.replace(/^www\./i, "").toLowerCase();
+}
+
+function extractRootHostname(input) {
+  const hostname = normalizeHostname(input);
+
+  if (!hostname) {
+    return "";
+  }
+
+  const parts = hostname.split(".").filter(Boolean);
+
+  if (parts.length <= 2) {
+    return hostname;
+  }
+
+  const tail = parts.slice(-2).join(".");
+  const extendedTail = parts.slice(-3).join(".");
+
+  if (SECOND_LEVEL_TLDS.has(tail)) {
+    return extendedTail;
+  }
+
+  return tail;
 }
 
 function isRestrictedScheme(url) {
   return (
     url.startsWith("chrome://") ||
     url.startsWith("chrome-extension://") ||
-    url.startsWith("about:")
+    url.startsWith("about:") ||
+    url === "newtab" ||
+    url.startsWith("newtab")
   );
 }
 
 function isBlockedHostname(hostname, blockedSites) {
   return blockedSites.some((entry) => {
-    const blockedHost = normalizeHostname(entry);
-    return hostname === blockedHost || hostname.endsWith(`.${blockedHost}`);
+    const blockedHost = extractRootHostname(entry);
+    return hostname === blockedHost;
   });
-}
-
-function isGraceActive(value) {
-  const numericValue = Number(value || 0);
-
-  if (!numericValue) {
-    return false;
-  }
-
-  if (numericValue > Date.now()) {
-    return true;
-  }
-
-  return Date.now() - numericValue < GRACE_WINDOW_MS;
 }
 
 chrome.runtime.onInstalled.addListener(async () => {
@@ -86,7 +122,7 @@ chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
     return;
   }
 
-  const hostname = normalizeHostname(url);
+  const hostname = extractRootHostname(url);
 
   if (!hostname) {
     return;
@@ -107,8 +143,9 @@ chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
 
   const graceKey = `grace_${hostname}`;
   const localState = await getLocal(graceKey);
+  const graceUntil = Number(localState[graceKey] || 0);
 
-  if (isGraceActive(localState[graceKey])) {
+  if (graceUntil > Date.now()) {
     return;
   }
 
