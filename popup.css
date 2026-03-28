@@ -1,0 +1,29 @@
+body {
+  min-width: 320px;
+  margin: 0;
+}
+
+.popup-shell {
+  padding: 16px;
+  background:
+    radial-gradient(circle at top right, rgba(255, 154, 31, 0.25), transparent 36%),
+    linear-gradient(180deg, #fff9f2 0%, #ffe7cb 100%);
+}
+
+.popup-card {
+  padding: 20px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(255, 154, 31, 0.24);
+  box-shadow: 0 14px 30px rgba(80, 41, 0, 0.12);
+}
+
+.popup-title {
+  margin: 0 0 10px;
+  font-size: 1.6rem;
+}
+
+.popup-copy {
+  margin: 0;
+  color: var(--color-muted);
+}
