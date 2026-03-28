@@ -9,11 +9,75 @@
   </head>
   <body>
     <main class="popup-shell">
-      <section class="popup-card">
-        <p class="eyebrow">KarmaYogi</p>
-        <h1 class="popup-title">Stay focused.</h1>
-        <p class="popup-copy">Project scaffold created. Popup controls can be added next.</p>
+      <section class="popup-content">
+        <header class="popup-header">
+          <div class="brand-lockup">
+            <svg class="brand-lotus" viewBox="0 0 64 64" aria-hidden="true">
+              <defs>
+                <filter id="popup-lotus-glow" x="-50%" y="-50%" width="200%" height="200%">
+                  <feDropShadow dx="0" dy="0" stdDeviation="2.1" flood-color="#FF9A1F" flood-opacity="0.45"/>
+                </filter>
+              </defs>
+              <g fill="currentColor" filter="url(#popup-lotus-glow)">
+                <ellipse cx="32" cy="17" rx="5.8" ry="15"/>
+                <ellipse cx="32" cy="17" rx="5.8" ry="15" transform="rotate(45 32 32)"/>
+                <ellipse cx="32" cy="17" rx="5.8" ry="15" transform="rotate(90 32 32)"/>
+                <ellipse cx="32" cy="17" rx="5.8" ry="15" transform="rotate(135 32 32)"/>
+                <ellipse cx="32" cy="17" rx="5.8" ry="15" transform="rotate(180 32 32)"/>
+                <ellipse cx="32" cy="17" rx="5.8" ry="15" transform="rotate(225 32 32)"/>
+                <ellipse cx="32" cy="17" rx="5.8" ry="15" transform="rotate(270 32 32)"/>
+                <ellipse cx="32" cy="17" rx="5.8" ry="15" transform="rotate(315 32 32)"/>
+                <circle cx="32" cy="32" r="5.4"/>
+              </g>
+            </svg>
+            <h1 class="brand-title">KarmaYogi</h1>
+          </div>
+          <p class="brand-subtitle">Guard your attention.</p>
+        </header>
+
+        <section class="panel-section">
+          <div class="focus-row">
+            <div>
+              <p class="focus-label">Focus Mode</p>
+            </div>
+
+            <label class="toggle" for="focus-toggle">
+              <input id="focus-toggle" type="checkbox" aria-label="Toggle Focus Mode">
+              <span class="toggle-track">
+                <span class="toggle-thumb"></span>
+              </span>
+            </label>
+          </div>
+
+          <p class="focus-status" id="focus-status">Loading focus state...</p>
+        </section>
+
+        <section class="panel-section">
+          <h2 class="section-title">Blocked Sites</h2>
+          <div class="site-pills" id="blocked-sites"></div>
+        </section>
+
+        <section class="panel-section panel-section--compact">
+          <div class="add-site-row">
+            <input
+              id="site-input"
+              type="text"
+              inputmode="url"
+              autocomplete="off"
+              spellcheck="false"
+              placeholder="add a site... e.g. notion.so"
+            >
+            <button class="add-site-button" id="add-site-button" type="button" aria-label="Add blocked site">
+              +
+            </button>
+          </div>
+          <p class="input-feedback" id="input-feedback" aria-live="polite"></p>
+        </section>
       </section>
+
+      <footer class="popup-footer">
+        Every moment of focus is an act of karma yoga
+      </footer>
     </main>
     <script src="popup.js"></script>
   </body>
