@@ -1,56 +1,184 @@
-# KarmaYogi
-> Stay focused. Your karma awaits.
+# 🪷 KarmaYogi
 
-KarmaYogi is a Manifest V3 Chrome extension that blocks distracting sites and redirects you to a calm Bhagavad Gita reflection page instead of the site you were about to open. It combines a focus toggle, editable blocklist, and a grace-period escape hatch with a sacred, temple-inspired UI.
+> *"You have a right to perform your duties, but not to the fruits of your actions."*
+> — Bhagavad Gita, 2.47
 
-## Installation
-1. Open `chrome://extensions`.
-2. Turn on `Developer mode`.
-3. Click `Load unpacked`.
-4. Select this project folder: `d:\karmayogi`.
+**KarmaYogi** is a Chrome extension that blocks distracting websites and replaces them with a moment of stillness — a Bhagavad Gita verse on Karma Yoga, your stated intention, and a soft temple bell. Not punishment. A pause.
 
-## Incognito
-1. Open `chrome://extensions`.
-2. Find `KarmaYogi`.
-3. Click `Details`.
-4. Turn on `Allow in Incognito` if you want blocking there too.
+---
 
-## Using the Popup
-- Open the extension popup and use the `Focus Mode` toggle to enable or pause blocking.
-- Remove a blocked site by clicking the `×` on its pill.
-- Add a new site by typing a domain like `notion.so` and pressing `Enter` or clicking `+`.
+## ✨ Features
 
-## Adding More Gita Quotes
-- Open [quotes.js](/d:/karmayogi/quotes.js).
-- Add a new object to `GITA_QUOTES` using this shape:
+- **Site Blocking** — blocks any site you choose the moment you navigate to it
+- **Gita Quote Page** — every redirect shows a random Sanskrit shloka with transliteration, English translation, verse reference, and context
+- **Focus Intention** — set what you're working on; it appears on every blocked page as a reminder
+- **Daily Redirect Count** — see how many times you've been redirected today
+- **5-Minute Grace Period** — need a site genuinely? Take 5 minutes, then blocking resumes
+- **Temple Bell Sound** — a single soft synthesized ghanti strike on every redirect, using the Web Audio API
+- **Escape Key Support** — press `Esc` to return to work instantly
+- **Focus Mode Toggle** — pause all blocking from the popup when needed
+- **Incognito Support** — works in incognito with one manual step (see below)
 
-```js
+---
+
+## 📸 Preview
+
+| Blocked Page | Popup Settings |
+|---|---|
+| Sanskrit verse, your intention, redirect count | Site management, focus toggle, intention input |
+
+---
+
+## 🚀 Installation
+
+KarmaYogi is not yet on the Chrome Web Store. Install it manually in under a minute:
+
+**1. Download the extension**
+
+```bash
+git clone https://github.com/swarn6402/karmayogi.git
+```
+
+Or download the ZIP from GitHub and extract it.
+
+**2. Open Chrome Extensions**
+
+Navigate to:
+```
+chrome://extensions
+```
+
+**3. Enable Developer Mode**
+
+Toggle **Developer Mode** on — top right corner of the extensions page.
+
+**4. Load the extension**
+
+Click **Load unpacked** → select the `karmayogi` folder.
+
+The KarmaYogi lotus icon will appear in your Chrome toolbar. You're done.
+
+---
+
+## 🥷 Enable in Incognito (Optional)
+
+By default, Chrome extensions don't run in Incognito. To enable:
+
+1. Go to `chrome://extensions`
+2. Find **KarmaYogi** → click **Details**
+3. Scroll to **"Allow in Incognito"** → toggle it **ON**
+
+---
+
+## 🛠 Usage
+
+### Blocking a site
+1. Click the KarmaYogi icon in your toolbar
+2. Type a domain in the input field (e.g. `linkedin.com`)
+3. Press **Enter** — it's blocked immediately
+
+### Removing a site
+Click the **✕** on any site pill in the popup.
+
+### Setting your intention
+Type what you're working on in the **"My Intention"** field in the popup. It will appear on every blocked page as a personal reminder.
+
+### Pausing all blocking
+Toggle **Focus Mode** off in the popup. All sites are unblocked until you turn it back on.
+
+### Taking a grace period
+On the blocked page, click **"5 Min Grace"** — you'll be allowed through for 5 minutes, then blocking resumes automatically.
+
+---
+
+## 📁 File Structure
+
+```
+karmayogi/
+├── manifest.json        # Extension config (Manifest V3)
+├── background.js        # Service worker: intercepts navigation, manages grace periods
+├── blocked.html         # The page shown when a site is blocked
+├── blocked.js           # Quote rendering, bell sound, grace period logic
+├── blocked.css          # Vedic UI styles for the blocked page
+├── popup.html           # Settings panel UI
+├── popup.js             # Blocklist management, intention, focus toggle
+├── popup.css            # Popup styles
+├── theme.css            # Shared CSS variables and font imports
+├── quotes.js            # 30 Bhagavad Gita quotes with Sanskrit, transliteration, translation
+└── icons/               # Extension icons (16px, 48px, 128px)
+```
+
+---
+
+## 🕉 Adding More Gita Quotes
+
+Open `quotes.js` and add an object to the `GITA_QUOTES` array:
+
+```javascript
 {
   verse: "6.35",
-  sanskrit: "असंशयं महाबाहो मनो दुर्निग्रहं चलम्...",
-  transliteration: "asaṁśayaṁ mahābāho mano durnigrahaṁ calam...",
-  translation: "Without doubt, the mind is restless and difficult to restrain...",
-  context: "A reminder that training attention takes practice and detachment"
+  sanskrit: "असंशयं महाबाहो मनो दुर्निग्रहं चलम्।\nअभ्यासेन तु कौन्तेय वैराग्येण च गृह्यते॥",
+  transliteration: "asaṃśayaṃ mahābāho mano durnigrahaṃ calam,\nabhyāsena tu kaunteya vairāgyeṇa ca gṛhyate.",
+  translation: "Undoubtedly, O mighty-armed one, the mind is difficult to control and restless. But it can be brought under control by practice and detachment.",
+  context: "Krishna acknowledges the restless mind — and gives the two-word answer: practice and detachment"
 }
 ```
 
-- Keep every field populated and keep `verse` in `Chapter.Verse` format.
+Save the file and reload the extension at `chrome://extensions`.
 
-## File Structure
-- [manifest.json](/d:/karmayogi/manifest.json): Extension manifest, permissions, popup, service worker, and web-accessible resources.
-- [background.js](/d:/karmayogi/background.js): Main navigation blocking logic, focus-mode checks, and grace-period redirect handling.
-- [blocked.html](/d:/karmayogi/blocked.html): Sacred full-page redirect experience shown when a blocked site is opened.
-- [blocked.css](/d:/karmayogi/blocked.css): Mandala background, layout, animation, and temple-inspired styling for the blocked page.
-- [blocked.js](/d:/karmayogi/blocked.js): Populates hostname and quote content, handles return and 5-minute grace actions.
-- [popup.html](/d:/karmayogi/popup.html): Popup UI for focus mode and blocklist management.
-- [popup.css](/d:/karmayogi/popup.css): Popup layout, toggle styling, pill styling, and scrollbar polish.
-- [popup.js](/d:/karmayogi/popup.js): Reads and writes `focusMode` and `blockedSites` through `chrome.storage.sync`.
-- [theme.css](/d:/karmayogi/theme.css): Shared color variables and Google Font imports used by popup and blocked page.
-- [quotes.js](/d:/karmayogi/quotes.js): Bhagavad Gita quote dataset and `getRandomQuote()` helper.
-- [icons/icon16.png](/d:/karmayogi/icons/icon16.png): 16px toolbar icon.
-- [icons/icon48.png](/d:/karmayogi/icons/icon48.png): 48px extension management icon.
-- [icons/icon128.png](/d:/karmayogi/icons/icon128.png): 128px store-style icon.
+---
 
-## Credits
-- Bhagavad Gita verse text and source mapping: Vedic Scriptures Bhagavad Gita dataset.
-- Fonts: `Noto Serif Devanagari`, `Cinzel`, and `EB Garamond` via Google Fonts.
+## 🎨 Design Philosophy
+
+KarmaYogi's UI follows a **Sacred Minimalism** aesthetic:
+
+- **Colors** — deep charcoal blacks, saffron (#FF9A1F), antique gold (#D4AF37), warm cream
+- **Typography** — Noto Serif Devanagari for Sanskrit, Cinzel for headings, EB Garamond for body
+- **Atmosphere** — subtle mandala background, radial diya-flame glow, staggered fade-in animations
+- **Sound** — a single synthesized temple bell using Web Audio API oscillators at 528 Hz and 396 Hz
+
+The goal: not a blocker that punishes, but a threshold that pauses.
+
+---
+
+## 🧰 Tech Stack
+
+- **Manifest V3** Chrome Extension API
+- **chrome.webNavigation** — main-frame navigation interception
+- **chrome.storage.sync** — blocklist, focus mode, intention (synced across devices)
+- **chrome.storage.local** — daily redirect count, grace period timestamps
+- **Web Audio API** — synthesized temple bell, no external audio files
+- **Google Fonts** — Noto Serif Devanagari, Cinzel, EB Garamond
+- Pure HTML, CSS, and vanilla JavaScript — no frameworks, no dependencies
+
+---
+
+## 🤝 Contributing
+
+Pull requests are welcome. If you'd like to add verified Gita verses, improve the UI, or fix a bug:
+
+1. Fork the repository
+2. Create a branch: `git checkout -b feature/your-feature`
+3. Commit your changes: `git commit -m "Add: your feature"`
+4. Push and open a Pull Request
+
+Please keep the design language consistent — sacred, minimal, warm.
+
+---
+
+## 📜 License
+
+MIT License — see [LICENSE](LICENSE) for details.
+
+---
+
+## 🙏 Credits
+
+- **Bhagavad Gita** — verses drawn from traditional Sanskrit sources
+- **Fonts** — [Google Fonts](https://fonts.google.com): Noto Serif Devanagari, Cinzel, EB Garamond
+- **Sound** — synthesized using the Web Audio API, inspired by the resonance of a temple ghanti
+- **Built by** [Swarnjeet](https://github.com/swarn6402)
+
+---
+
+*Every moment of focus is an act of karma yoga.*
