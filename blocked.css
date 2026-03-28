@@ -1,6 +1,6 @@
 body {
   position: relative;
-  overflow-x: hidden;
+  overflow: hidden;
   background:
     radial-gradient(ellipse at center, rgba(255, 154, 31, 0.06) 0%, transparent 65%),
     var(--color-bg);
@@ -251,6 +251,7 @@ body::before {
   opacity: 0;
   transform: translateY(12px);
   animation: fade-up 600ms ease-out var(--delay, 0ms) both;
+  animation-fill-mode: both;
 }
 
 .reveal-0 {
@@ -283,6 +284,7 @@ body::before {
   animation:
     fade-up 600ms ease-out 450ms both,
     breathe 4s ease-in-out 1050ms infinite;
+  animation-fill-mode: both, both;
 }
 
 @keyframes fade-up {
@@ -308,16 +310,23 @@ body::before {
   }
 }
 
-@media (max-width: 640px) {
-  .blocked-card {
-    padding: 30px 18px 26px;
+@media (max-width: 400px) {
+  .sanskrit-text {
+    font-size: 1.2rem;
   }
 
   .actions {
-    gap: 12px;
+    flex-direction: column;
+    align-items: stretch;
   }
 
   .action-button {
     width: 100%;
+  }
+}
+
+@media (max-width: 375px) {
+  .blocked-card {
+    padding: 28px 16px 24px;
   }
 }
