@@ -4,10 +4,8 @@ const DEFAULT_BLOCKED_SITES = [
   "twitter.com",
   "facebook.com",
   "reddit.com",
-  "youtube.com",
   "tiktok.com",
   "snapchat.com",
-  "linkedin.com",
   "pinterest.com",
   "tumblr.com"
 ];
